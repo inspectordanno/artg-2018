@@ -92,14 +92,14 @@ d3.csv('./data/hubway_trips_reduced.csv', parse, function(err,trips){
     .attr('class', 'chart')
     .attr('transform', `translate(${margin.l}, ${margin.t})`); //selection of <g.chart>
 
-  console.log(plot.node());
+  console.log(plot);
   console.log(svgNode.node());
 
   const stationNodes = plot.selectAll('.station') //selection of 0 elements
       .data(tripVolumebyStation0)
       .enter() //special selection of deficit between DOM and data points in the array size = 142
       .append('g')
-      .attr('class, station')
+      .attr('class', 'station') //
       .attr('transform', function(d,i){
         return `translate(0, ${i*h/tripsByStation0.length})`
       });  //selection of <g.station> x 142
