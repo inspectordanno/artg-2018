@@ -31,7 +31,7 @@ function parse(d){
 
 d3.csv('./data/hubway_trips_reduced.csv', parse, function(err,trips){
 
-	 // console.log(trips);
+	 console.log(trips);
 	 // console.log(`There are ${trips.length} trips`)
 
 	//Now that the trips dataset has been imported and parsed, let's step through a series of exercises to familiarize ourselves with the data
@@ -60,8 +60,8 @@ d3.csv('./data/hubway_trips_reduced.csv', parse, function(err,trips){
 	Please look at the definition of "mean" and "median" if you are not entirely sure of the difference
 	YOUR CODE HERE:
 	***/
-	const meanDuration = undefined; //MODIFY THIS
-	const medianDuration = undefined; //MODIFY THIS
+	const meanDuration = d3.mean(trips, function(d){return d.duration}); //MODIFY THIS
+	const medianDuration = d3.median(trips, function(d){return d.duration});; //MODIFY THIS
 	console.log(`Median duration is ${medianDuration} seconds; mean duration is ${meanDuration} seconds`);
 
 	/***
@@ -94,7 +94,7 @@ d3.csv('./data/hubway_trips_reduced.csv', parse, function(err,trips){
 	Hint: use Array.prototype.slice
 	YOUR CODE HERE:
 	***/
-	const top10RegisteredTrips = registeredTrips.slice();
+	const top10RegisteredTrips = registeredTrips.slice(0,11);
 	const bottom10RegisteredTrips = registeredTrips.slice();
 	console.log(top10RegisteredTrips);
 	console.log(bottom10RegisteredTrips);
@@ -120,11 +120,41 @@ d3.csv('./data/hubway_trips_reduced.csv', parse, function(err,trips){
 	YOUR CODE HERE:
 	***/
 
+	const departureNest = d3.nest()
+		.key(function(d) {return d.station0} )
+		.entries(trips);
+		console.log(departureNest);
+
+
+
 	/***
 	4.2 Further "collapse" this array, so that for each departure stations, we have the number of trips departing from each
 	Hint: there are multiple ways of doing this, including using d3.nest.rollup, but attempt this with what we've learned in this assignment
 	YOUR CODE HERE:
 	***/
+	console.log(departureNest);
+
+	const departureVolumeByStation0 = departureNest //arrays
+		.map(function(d){
+			return {
+				departureStation:d.key,
+				volume:d.values.length
+			};
+		});
+
+	console.log(departureVolumeByStation0)
+
+
+
+	/***
+	[
+
+	{
+	key:...
+	values:[...]
+}
+]
+***/
 
 	/***
 	5.0 BONUS Question
