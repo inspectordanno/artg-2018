@@ -27,6 +27,13 @@ const somePromise = new Promise(function(resolve, reject){
 }); //Note that this Promise will resolve a value of 5, and will never reject
 console.log(somePromise);
 
+const someOtherPromise = new Promise(function(resolve,reject){
+	//resolve ==> function
+	//reject ==> function
+	//some kind of time consuming process will occur
+	resolve()
+});
+
 //5.1.2 To access the Promised, "resolved" value, use Promise.then()
 somePromise.then(function(res){
 	console.log('The resolution value is ' + res);

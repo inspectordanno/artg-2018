@@ -3,11 +3,12 @@ import './style/main.css';
 import './style/stationSearch.css';
 
 //Import utility function
-import {parse, parse2} from './utils';
+import {parse, parse2, parseStation, fetchCsv} from './utils';
 
 //Import modules
 import Histogram from './components/Histogram';
 import MainViz from './components/mainViz';
+import Animation from './components/Animation';
 
 //Histogram
 //factory
@@ -35,18 +36,33 @@ const activityHistogram = Histogram()
 
 const mainViz = MainViz(); //a closure
 
-d3.csv('./data/hubway_trips_reduced.csv', parse, (err,trips) => {
+fetchCsv('.data/hubway_trips_reduced.csv', parse) //this is a promise, and it will give you the data in hubway_trips_reduced.csv
+	.then((resolvedValue) => {
+			console.log(resolvedValue);
+	})
 
-	d3.select('#time-of-the-day-main')
-		.datum(trips)
-		.each(activityHistogram);
+fetchCsv('.data/hubway_stations.csv', parseStation) //this is a promise, and it will give you the data in hubway_stations.csv
+	.then((resolvedValue) => {
+			console.log(resolvedValue);
+	})
 
-	d3.select('#timeline-main')
-		.datum(trips)
-		.each(timeline);
+//Import data using the Promise interface
+Promise.all([
+		fetchCsv('./data/hubway_trips_reduced.csv', parse),
+		fetchCsv('./data/hubway_stations.csv', parseStation)
+	]).then(([trips, stations]) => {
 
-	d3.select('.main')
-		.datum(trips)
-		.each(mainViz);
+		d3.select('#time-of-the-day-main')
+			.datum(trips)
+			.each(activityHistogram);
 
-});
+		d3.select('#timeline-main')
+			.datum(trips)
+			.each(timeline);
+
+		//We will not draw mainViz for now
+		// d3.select('.main')
+		// 	.datum(trips)
+		// 	.each(mainViz);
+
+	});
