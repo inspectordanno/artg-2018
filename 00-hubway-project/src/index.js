@@ -5,13 +5,13 @@ import './style/stationSearch.css';
 //Import utility function
 import {parse, parse2, parseStation, fetchCsv} from './utils';
 
-//Import modules
+//Import modules default exports
 import Histogram from './components/Histogram';
 import MainViz from './components/mainViz';
 import Animation from './components/Animation';
+import Model from './components/Model';
 
-//Histogram
-//factory
+//Create modules
 const timeline = Histogram()
 	.domain([new Date(2013,0,1), new Date(2013,11,31)])
 	.value(d => d.t0)
@@ -35,16 +35,9 @@ const activityHistogram = Histogram()
 	.maxY(1000);
 
 const mainViz = MainViz(); //a closure
-
-fetchCsv('.data/hubway_trips_reduced.csv', parse) //this is a promise, and it will give you the data in hubway_trips_reduced.csv
-	.then((resolvedValue) => {
-			console.log(resolvedValue);
-	})
-
-fetchCsv('.data/hubway_stations.csv', parseStation) //this is a promise, and it will give you the data in hubway_stations.csv
-	.then((resolvedValue) => {
-			console.log(resolvedValue);
-	})
+const animation = Animation(
+		document.querySelector('.main') //DOM Node of <div class="main">
+	);
 
 //Import data using the Promise interface
 Promise.all([
@@ -64,5 +57,7 @@ Promise.all([
 		// d3.select('.main')
 		// 	.datum(trips)
 		// 	.each(mainViz);
+
+		animation(trips, stations);
 
 	});
