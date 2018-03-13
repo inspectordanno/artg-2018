@@ -16,7 +16,9 @@ function Animation(_){
 		.domain([0,3000])
 		.range([3,20]);
 	//Force layout related
+	//Define force simulation: step 1
 	const force = d3.forceSimulation();
+	//Define some forces: step 2
 	const collide = d3.forceCollide().radius(d => d.r + 2);
 	const radial = d3.forceRadial();
 
@@ -100,16 +102,17 @@ function Animation(_){
 			.x(_w/2)
 			.y(_h/2)
 			.radius(Math.min(_w,_h)/2);
-		force
+		force // add forces to simulation: step 3
 			.force('collide',collide)
 			.force('radial',radial)
 			.alpha(1);
 
 		force
 			.on('tick',() => {
+				//each step of the simulation
 				stationsEnter
 					.merge(stationsNodes)
-					.attr('transform', d => `translate(${d.x}, ${d.y})`);			
+					.attr('transform', d => `translate(${d.x}, ${d.y})`);
 			})
 			.on('end', () => {
 				renderFrame();

@@ -39,11 +39,30 @@ const animation = Animation(
 		document.querySelector('.main') //DOM Node of <div class="main">
 	);
 
+const result = fetch('https://conduit.productionready.io/api/articles')
+	.then(result => result.json());
+
+const articles = result.then(res => res.articles);
+const count = result.then(res => res.articlesCount);
+const articleTitles = articles.then(res => res.map(v => v.title));
+
+articles.then(res => console.log(res));
+count.then(res => console.log(res));
+articleTitles.then(res => console.log(res));
+
+fetch('https://conduit.productionready.io/api/articles')	// return a promise
+	.then(result => {
+		console.log(result);
+	});
+
 //Import data using the Promise interface
-Promise.all([
+const masterPromise = Promise.all([
 		fetchCsv('./data/hubway_trips_reduced.csv', parse),
 		fetchCsv('./data/hubway_stations.csv', parseStation)
-	]).then(([trips, stations]) => {
+	])
+
+masterPromise
+	.then(([trips, stations]) => {
 
 		d3.select('#time-of-the-day-main')
 			.datum(trips)
